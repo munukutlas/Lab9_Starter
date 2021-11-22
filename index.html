@@ -69,23 +69,32 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button onclick='logFunction()'>Console Log</button>
+      <button onclick = 'errorFunction()'>Console Error</button>
+      <button onclick= 'countFunction()'>Console Count</button>
+      <button onclick='warnFunction()'>Console Warn</button>
+      <button onclick='assertFunction()'>Console Assert</button>
+      <button onclick='clearFunction()'>Console Clear</button>
+      <button onclick='dirFunction()'>Console Dir</button>
+      <button onclick='dirXMLFunction()'>Console dirxml</button>
+      <button onclick='groupStartFunction()'>Console Group Start</button>
+      <button onclick='groupEndFunction()'>Console Group End</button>
+      <button onclick='tableFunction()'>Console Table</button>
+      <button onclick='startTimerFunction()'>Start Timer</button>
+      <button onclick='endTimerFunction()'>End Timer</button>
+      <button onclick='traceFunction()'>Console Trace</button>
+      <button onclick='globalErrorFunction()'>Trigger a Global Error</button>
     </section>
   </main>
+
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "206f90f885fc417288df6c7235096dd9"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
 
   <script>
     let form = document.querySelector('form');
@@ -102,6 +111,130 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+
+    function logFunction() {
+      console.log('Console Log Button clicked');
+    }
+
+    function errorFunction() {
+      console.error('Console Error Button clicked');
+    }
+
+    function countFunction() {
+      console.count();
+    }
+
+    function warnFunction() {
+      console.warn('Console Warn Button clicked');
+    }
+
+    function assertFunction() {
+      const num1 = 1;
+      const num2 = 2;
+      const reason = 'Assert Button clicked - false';
+      console.assert(num1 > num2, {num1, num2, reason});
+    }
+
+    function clearFunction() {
+      console.clear();
+    }
+
+    function dirFunction() {
+      console.dir(document.head);
+    }
+
+    function dirXMLFunction() {
+      console.dirxml(document);
+    }
+
+    function groupStartFunction() {
+      const label = 'Grouping Label';
+      console.group(label);
+    }
+
+    function groupEndFunction() {
+      //Step 3
+      try {
+        //let label = 'Grouping End Label';
+        console.log(label);
+      } catch(err) {
+        alert('Label undefined');
+      } finally {
+        console.groupEnd();
+      }
+    }
+
+    function tableFunction() {
+
+      //Step 3
+      try {
+        throw new Error('Manually thrown error');
+      } catch(err) {
+        console.log(err.message);
+      } finally {
+        console.table([
+        {one: 'hello',
+        two: 'bye'},
+        {one: 'good morning',
+        two: 'good afternoon',
+        three: 'good evening'},
+        {one: 'greetings',
+        two: 'a pleasure'
+        }
+      ]);
+      }
+
+    }
+
+    function startTimerFunction() {
+      console.time();
+    }
+
+    function endTimerFunction() {
+      console.timeEnd();
+    }
+
+    class CustomTestError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "Custom Error";
+      }
+    }
+
+    function traceFunction() {
+      
+      //Step 4
+      try {
+        let check = true;
+        if (check) {
+          throw new CustomTestError();
+        }
+      } catch(err) {
+        if (err instanceof CustomTestError) {
+          console.log('Custom Error Caught');
+        }
+      } finally {
+        console.trace();
+      }
+
+    }
+
+    function globalErrorFunction() {
+      window.onerror = function() {
+        console.log('Client side error');
+      }
+      console.log('button global error');
+      TrackJS.track('Testing TrackJS!');
+    }
+      
+
+
+
+
+
+
+
+
   </script>
 </body>
 
